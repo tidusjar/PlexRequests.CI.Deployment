@@ -7,8 +7,8 @@ namespace PlexRequests.CI.Deployment.App
 {
     public class Deploy
     {
-        //private const string DeploymentPath = @"C:\PlexRequests.Net\Deployment\";
-        private const string DeploymentPath = @"C:\Users\Jamie.Rees\Documents\Test\Deployment";
+        private const string DeploymentPath = @"C:\PlexRequests.Net\Deployment\";
+        //private const string DeploymentPath = @"C:\Users\Jamie.Rees\Documents\Test\Deployment";
         private const string ZipName = "PlexRequests.zip";
         private string FullZipPath => Path.Combine(DeploymentPath, ZipName);
         public void DeployApp(string zipPath)
