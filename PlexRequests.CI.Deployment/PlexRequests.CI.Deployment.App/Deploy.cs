@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -62,7 +63,16 @@ namespace PlexRequests.CI.Deployment.App
             var process = Process.GetProcessesByName("PlexRequests");
             foreach (var p in process)
             {
-                p.Kill();
+                try
+                {
+                    Console.WriteLine($"Killing {p.ProcessName}");
+                    p.Kill();
+                }
+                catch (Win32Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
             }
         }
 
