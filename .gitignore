@@ -243,3 +243,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/PlexRequests.CI.Deployment/PlexRequests.CI.Deployment/PlexRequests.CI.Deployment.v2.ncrunchproject

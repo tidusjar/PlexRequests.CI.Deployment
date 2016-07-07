@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Timers;
+
+using Timer = System.Timers.Timer;
 
 namespace PlexRequests.CI.Deployment.App
 {
@@ -28,8 +32,8 @@ namespace PlexRequests.CI.Deployment.App
         {
             Timer = new Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
             Timer.Elapsed += TimerOnElapsed;
-            FileWatcher.Created += FileWatcher_Created;
-            FileWatcher.Changed += FileWatcher_Created;
+            FileWatcher.Created += FileWatcherCreated;
+            FileWatcher.Changed += FileWatcherCreated;
         }
 
         private void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -40,7 +44,7 @@ namespace PlexRequests.CI.Deployment.App
             }
         }
 
-        private void FileWatcher_Created(object sender, FileSystemEventArgs e)
+        private void FileWatcherCreated(object sender, FileSystemEventArgs e)
         {
             DateTime outDt;
             var name = e.Name;
@@ -52,6 +56,8 @@ namespace PlexRequests.CI.Deployment.App
             if (e.Name.Equals("PlexRequests.zip"))
             {
                 Console.WriteLine("Found PlexRequests.zip");
+                Thread.Sleep(TimeSpan.FromSeconds(20));
+                Console.WriteLine("Waiting for file to download");
                 var d = new Deploy();
                 d.DeployApp(e.FullPath);
             }

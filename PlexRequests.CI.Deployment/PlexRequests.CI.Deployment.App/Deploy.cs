@@ -2,14 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 
 namespace PlexRequests.CI.Deployment.App
 {
     public class Deploy
     {
-        private const string DeploymentPath = @"C:\PlexRequests.Net\Deployment\";
-        //private const string DeploymentPath = @"C:\Users\Jamie.Rees\Documents\Test\Deployment";
+        //private const string DeploymentPath = @"C:\PlexRequests.Net\Deployment\";
+        private const string DeploymentPath = @"C:\Users\Jamie.Rees\Documents\Test\Deployment";
         private const string ZipName = "PlexRequests.zip";
         private string FullZipPath => Path.Combine(DeploymentPath, ZipName);
         public void DeployApp(string zipPath)
@@ -23,11 +22,13 @@ namespace PlexRequests.CI.Deployment.App
 
         private void MoveFile(string zipPath)
         {
+            Console.WriteLine("Moving File");
             Directory.CreateDirectory(DeploymentPath);
             File.Move(zipPath, FullZipPath);
         }
         private void Unzip()
         {
+            Console.WriteLine("Starting to unzip");
             using (var archive = ZipFile.OpenRead(FullZipPath))
             {
                 foreach (var entry in archive.Entries)
@@ -57,21 +58,27 @@ namespace PlexRequests.CI.Deployment.App
 
         private void KillAppProcess()
         {
-            var process = Process.GetProcessesByName("PlexRequests.exe");
-            process.FirstOrDefault()?.Kill();
+            Console.WriteLine("Killing current PlexRequests process");
+            var process = Process.GetProcessesByName("PlexRequests");
+            foreach (var p in process)
+            {
+                p.Kill();
+            }
         }
 
         private void StartApplication()
         {
+            Console.WriteLine("Starting new version");
             var info = new ProcessStartInfo(Path.Combine(DeploymentPath, "PlexRequests.exe"))
             {
-                Arguments = "-p 8095"
+                Arguments = "-p 8099"
             };
             Process.Start(info);
         }
 
         private void DeleteOldZip()
         {
+            Console.WriteLine("Deleting .zip");
             File.Delete(FullZipPath);
         }
     }
