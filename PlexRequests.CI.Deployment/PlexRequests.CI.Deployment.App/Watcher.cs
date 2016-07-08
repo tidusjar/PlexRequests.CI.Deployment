@@ -56,7 +56,7 @@ namespace PlexRequests.CI.Deployment.App
             if (e.Name.Equals("PlexRequests.zip"))
             {
                 Console.WriteLine("Found PlexRequests.zip");
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                Thread.Sleep(TimeSpan.FromMinutes(1));
                 Console.WriteLine("Waiting for file to download");
                 var d = new Deploy();
                 d.DeployApp(e.FullPath);
