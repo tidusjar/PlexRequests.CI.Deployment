@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace PlexRequests.CI.Deployment.App
 {
@@ -39,7 +40,7 @@ namespace PlexRequests.CI.Deployment.App
             {
                 foreach (var entry in archive.Entries)
                 {
-                    if(entry.FullName.Equals("Release/")) { continue; }
+                    if (entry.FullName.Equals("Release/")) { continue; }
 
                     var fullname = string.Empty;
                     if (entry.FullName.Contains("Release/")) // Don't extract the release folder, we are already in there
@@ -90,11 +91,16 @@ namespace PlexRequests.CI.Deployment.App
         private void StartApplication()
         {
             Console.WriteLine("Starting new version");
-            var info = new ProcessStartInfo(Path.Combine(DeploymentPath, "PlexRequests.exe"))
-            {
-                Arguments = "-p 8099"
-            };
-            Process.Start(info);
+            Task.Run(
+                () =>
+                {
+                    var info = new ProcessStartInfo(Path.Combine(DeploymentPath, "PlexRequests.exe"))
+                    {
+                        Arguments = "-p 8099"
+                    };
+
+                    Process.Start(info);
+                });
         }
 
         private void DeleteOldZip()
