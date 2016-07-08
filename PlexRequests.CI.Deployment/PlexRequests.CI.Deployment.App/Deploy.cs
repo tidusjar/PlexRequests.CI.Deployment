@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Threading;
 
 namespace PlexRequests.CI.Deployment.App
 {
@@ -25,6 +26,10 @@ namespace PlexRequests.CI.Deployment.App
         {
             Console.WriteLine("Moving File");
             Directory.CreateDirectory(DeploymentPath);
+            if (File.Exists(FullZipPath))
+            {
+                File.Delete(FullZipPath);
+            }
             File.Move(zipPath, FullZipPath);
         }
         private void Unzip()
@@ -73,6 +78,12 @@ namespace PlexRequests.CI.Deployment.App
                     Console.WriteLine(e.Message);
                 }
 
+            }
+            process = Process.GetProcessesByName("PlexRequests");
+            while (process.Length > 0)
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+                process = Process.GetProcessesByName("PlexRequests");
             }
         }
 
