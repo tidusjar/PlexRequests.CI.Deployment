@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -12,12 +13,12 @@ namespace PlexRequests.CI.Deployment.App
     public class Watcher
     {
         private FileSystemWatcher FileWatcher { get; }
-        private Dictionary<string,DateTime> FilesFound { get; set; }
+        private ConcurrentDictionary<string,DateTime> FilesFound { get; set; }
         private readonly object _lock = new object();
         private Timer Timer { get; set; }
         public Watcher(string pathToWatch)
         {
-            FilesFound = new Dictionary<string, DateTime>();
+            FilesFound = new ConcurrentDictionary<string, DateTime>();
             if (!Directory.Exists(pathToWatch))
             { throw new ArgumentException("Path does not exist"); }
 
@@ -40,7 +41,7 @@ namespace PlexRequests.CI.Deployment.App
         {
             lock (_lock)
             {
-                FilesFound = new Dictionary<string, DateTime>();
+                FilesFound = new ConcurrentDictionary<string, DateTime>();
             }
         }
 
@@ -55,6 +56,7 @@ namespace PlexRequests.CI.Deployment.App
             }
             if (e.Name.Equals("PlexRequests.zip"))
             {
+                FilesFound.TryAdd(name, DateTime.UtcNow);
                 Console.WriteLine("Found PlexRequests.zip");
                 Thread.Sleep(TimeSpan.FromMinutes(1));
                 Console.WriteLine("Waiting for file to download");
