@@ -27,6 +27,7 @@ namespace PlexRequests.CI.Deployment.App
                 EnableRaisingEvents = true,
             };
             HookupEvents();
+            GC.KeepAlive(FileWatcher);
         }
 
         private void HookupEvents()
