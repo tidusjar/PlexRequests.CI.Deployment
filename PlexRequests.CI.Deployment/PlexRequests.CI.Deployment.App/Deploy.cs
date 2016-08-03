@@ -25,7 +25,7 @@ namespace PlexRequests.CI.Deployment.App
 
         private void MoveFile(string zipPath)
         {
-            Console.WriteLine("Moving File");
+            ConsoleHelper.WriteLine("Moving File");
             Directory.CreateDirectory(DeploymentPath);
             if (File.Exists(FullZipPath))
             {
@@ -35,7 +35,7 @@ namespace PlexRequests.CI.Deployment.App
         }
         private void Unzip()
         {
-            Console.WriteLine("Starting to unzip");
+            ConsoleHelper.WriteLine("Starting to unzip");
             using (var archive = ZipFile.OpenRead(FullZipPath))
             {
                 foreach (var entry in archive.Entries)
@@ -57,7 +57,7 @@ namespace PlexRequests.CI.Deployment.App
                     else
                     {
                         entry.ExtractToFile(fullPath, true);
-                        Console.WriteLine("Deployed {0}", entry.FullName);
+                        ConsoleHelper.WriteLine("Deployed {0}", entry.FullName);
                     }
                 }
             }
@@ -65,18 +65,18 @@ namespace PlexRequests.CI.Deployment.App
 
         private void KillAppProcess()
         {
-            Console.WriteLine("Killing current PlexRequests process");
+            ConsoleHelper.WriteLine("Killing current PlexRequests process");
             var process = Process.GetProcessesByName("PlexRequests");
             foreach (var p in process)
             {
                 try
                 {
-                    Console.WriteLine($"Killing {p.ProcessName}");
+                    ConsoleHelper.WriteLine($"Killing {p.ProcessName}");
                     p.Kill();
                 }
                 catch (Win32Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    ConsoleHelper.WriteLine(e.Message);
                 }
 
             }
@@ -90,7 +90,7 @@ namespace PlexRequests.CI.Deployment.App
 
         private void StartApplication()
         {
-            Console.WriteLine("Starting new version");
+            ConsoleHelper.WriteLine("Starting new version");
             Task.Run(
                 () =>
                 {
@@ -105,7 +105,7 @@ namespace PlexRequests.CI.Deployment.App
 
         private void DeleteOldZip()
         {
-            Console.WriteLine("Deleting .zip");
+            ConsoleHelper.WriteLine("Deleting .zip");
             File.Delete(FullZipPath);
         }
     }

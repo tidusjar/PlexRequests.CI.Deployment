@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Timers;
 
@@ -58,9 +56,9 @@ namespace PlexRequests.CI.Deployment.App
             if (e.Name.Equals("PlexRequests.zip"))
             {
                 FilesFound.TryAdd(name, DateTime.UtcNow);
-                Console.WriteLine("Found PlexRequests.zip");
+                ConsoleHelper.WriteLine("Found PlexRequests.zip");
                 Thread.Sleep(TimeSpan.FromMinutes(1));
-                Console.WriteLine("Waiting for file to download");
+                ConsoleHelper.WriteLine("Waiting for file to download");
                 var d = new Deploy();
                 d.DeployApp(e.FullPath);
             }

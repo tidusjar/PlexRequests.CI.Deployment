@@ -11,8 +11,8 @@ namespace PlexRequests.CI.Deployment.App
         static void Main(string[] args)
         {
             var watcher = new Watcher(args[0]);
-            
-            Console.WriteLine("Watching");
+            GC.KeepAlive(watcher);
+            ConsoleHelper.WriteLine("Watching");
             Console.ReadLine();
         }
     }
