@@ -8,5 +8,10 @@ namespace PlexRequests.CI.Deployment.App
         {
             Console.WriteLine($"{DateTime.Now.ToString("t")} {text}");
         }
+
+        public static void WriteLine(string text, params object[] args)
+        {
+            Console.WriteLine($"{DateTime.Now.ToString("t")} {text}", args);
+        }
     }
 }
